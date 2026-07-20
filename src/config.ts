@@ -53,7 +53,7 @@ export const navBarConfig: NavBarConfig = {
 };
 
 export const profileConfig: ProfileConfig = {
-	avatar: "D:assets/images/p0.jpg", // Relative to the /src directory. Relative to the /public directory if it starts with '/'
+	avatar: "assets/images/p0.png", // Relative to the /src directory. Relative to the /public directory if it starts with '/'
 	name: "郭嘉",
 	bio: "School of Energy and Power Engineering, Guangdong University of Petrochemical Technology.",
 	links: [

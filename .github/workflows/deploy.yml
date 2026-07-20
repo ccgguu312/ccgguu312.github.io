@@ -1,18 +1,15 @@
 name: Deploy to GitHub Pages
 
-# 推送main分支自动部署，也能手动点按钮部署
 on:
   push:
     branches: [main]
   workflow_dispatch:
 
-# Pages部署必须的权限
 permissions:
   contents: read
   pages: write
   id-token: write
 
-# 并发控制，多次推送只保留最新一次构建
 concurrency:
   group: 'pages'
   cancel-in-progress: true
@@ -22,32 +19,23 @@ jobs:
     name: 构建博客
     runs-on: ubuntu-latest
     steps:
-      # 拉取你的代码
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      # 安装pnpm包管理器
       - name: Install pnpm
         uses: pnpm/action-setup@v4
-        with:
 
-
-      # 配置Node24，缓存依赖加速构建
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
+          cache: pnpm  # 不指定 node-version，自动用环境默认版本
 
-          cache: pnpm
-
-      # 安装全部依赖
       - name: Install dependencies
         run: pnpm install --no-frozen-lockfile
 
-      # Astro构建生成dist静态网页
       - name: Build Astro blog
         run: pnpm astro build
 
-      # 上传dist产物，用于后续部署
       - name: Upload build artifact
         uses: actions/upload-pages-artifact@v3
         with:
@@ -55,10 +43,8 @@ jobs:
 
   deploy:
     name: 上线到Pages
-    # 必须等构建完成再执行部署
     needs: build
     runs-on: ubuntu-latest
-    # 绑定Pages环境，部署后自动输出网址
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
